@@ -1,0 +1,1 @@
+使用 mvn assembly:assembly 可以生成直接运行的jar包。
