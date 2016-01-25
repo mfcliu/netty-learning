@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
@@ -19,8 +20,9 @@ public class FileClient {
 
 	private static int mapedFileSizeCommitLog = 1024 * 1024 * 1024;
 
-	private static final String fileName = "D:\\temp\\testfilecache\\a.dat";
-	private static final String fileName2 = "D:\\temp\\testfilecache\\b.dat";
+	private static final String fileName = "a.dat";
+	private static final String fileName2 = "b.dat";
+	private static final String fileName3 = "c.dat";
 
 	private static final Logger logger = LoggerFactory.getLogger(FileClient.class.getName());
 
@@ -28,6 +30,7 @@ public class FileClient {
 		FileClient fclient = new FileClient();
 		fclient.start();
 		fclient.start2();
+		fclient.start3();
 	}
 
 	@SuppressWarnings("resource")
@@ -71,6 +74,26 @@ public class FileClient {
 		for (int i = 0; i < 1000000; i++) {
 			fos.write(testString.getBytes());
 		}
+		fos.close();
+		long stopTime = System.currentTimeMillis();
+		logger.debug("time2 :  " + (stopTime - startTime));
+
+	}
+
+	public void start3() throws IOException {
+		String input = "hello";
+
+		byte[] inputBytes = input.getBytes();
+		ByteBuffer buffer = ByteBuffer.wrap(inputBytes);
+
+		FileOutputStream fos = new FileOutputStream(fileName3);
+		FileChannel fileChannel = fos.getChannel();
+
+		long startTime = System.currentTimeMillis();
+		for (int i = 0; i < 1000000; i++) {
+			fileChannel.write(buffer);
+		}
+		fileChannel.close();
 		fos.close();
 		long stopTime = System.currentTimeMillis();
 		logger.debug("time2 :  " + (stopTime - startTime));
