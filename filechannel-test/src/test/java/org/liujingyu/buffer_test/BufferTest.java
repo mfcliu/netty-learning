@@ -97,4 +97,10 @@ public class BufferTest {
 		
 	}
 	
+	@Test
+	public void testDirect(){
+		ByteBuffer bf = ByteBuffer.allocate(48);
+		ByteBuffer bf1 = ByteBuffer.allocateDirect(48);
+	}
+	
 }
